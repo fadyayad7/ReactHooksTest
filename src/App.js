@@ -1,24 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+
+
+const randomColor = () => '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+
+function useDocumentBg(){
+  useEffect(() =>{
+    function hanldeBGColor(){
+        document.body.style.background = randomColor();
+    }
+    hanldeBGColor();
+    window.addEventListener('mousedown', hanldeBGColor);
+  });
+}
+
+function useCount(){
+  const [count, setCount] = useState(0);
+
+  function increment() {
+    setCount((c) => c + 1);
+  }
+
+  function decrement() {
+    setCount((c) => (c > 0 ? c - 1 : c));
+  }
+
+  return{
+    count, increment, decrement
+  }
+}
 
 function App() {
+
+  useDocumentBg();
+
+  
+ 
+
+  const {count, increment, decrement} = useCount();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      Count: {count}
+      <br />
+      <br />
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
     </div>
   );
 }
